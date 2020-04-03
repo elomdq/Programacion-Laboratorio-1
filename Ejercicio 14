@@ -1,0 +1,110 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include "pila.h"
+
+int main()
+{
+    /*Determinar si la cantidad de elementos de la pila DADA es par. Si es par, pasar el elemento del tope
+de la pila AUX a la pila PAR y si es impar pasar el tope a la pila IMPAR.*/
+
+    Pila dada, aux, par, impar, aux2, aux3;
+    int i, numRandom, limitePilas;
+
+    inicpila(&dada);
+    inicpila(&aux);
+    inicpila(&aux2);
+    inicpila(&aux3);
+    inicpila(&par);
+    inicpila(&impar);
+
+    srand(time(NULL));
+
+    /*Cargamos datos en la pila DADA*/
+
+    i=0;
+    limitePilas = (rand()%10) + 1;
+
+    while(i<limitePilas){
+
+        numRandom = (rand()%10) +1;
+        apilar(&dada, numRandom);
+        i++;
+    }
+
+    printf("\n\nPILA DADA INICIAL\n");
+    mostrar(&dada);
+
+
+    /*Evaluamos si DADA es par o impar pasando los datos a una pila AUX y consultando la comparativa entre ambas pilas,
+    si DADA nunca fue igual a AUX entonces es impar, en caso contrario es par.*/
+
+    while(!pilavacia(&dada)){
+
+        apilar(&aux, desapilar(&dada)); //Paso un elemento de pila DADA a AUX
+
+        //COMPARO LAS PILAS DADA y AUX
+
+        while(!pilavacia(&dada) && !pilavacia(&aux)){
+            apilar(&aux2,desapilar(&dada));
+            apilar(&aux3,desapilar(&aux));
+        }
+
+        if(pilavacia(&dada) && !pilavacia(&aux)) //PILA DADA ES IMPAR
+        {
+            while(!pilavacia(&aux3))
+           {
+               apilar(&aux, desapilar(&aux3));
+           }
+           while(!pilavacia(&aux2))
+           {
+               apilar(&dada, desapilar(&aux2));
+           }
+           while(!pilavacia(&dada))
+           {
+               apilar(&aux, desapilar(&dada));
+           }
+           apilar(&impar, desapilar(&aux));
+        }
+        else if (pilavacia(&dada) && pilavacia(&aux)) //PILA DADA ES PAR
+        {
+            while(!pilavacia(&aux3))
+           {
+               apilar(&aux, desapilar(&aux3));
+           }
+           while(!pilavacia(&aux2))
+           {
+               apilar(&dada, desapilar(&aux2));
+           }
+            while(!pilavacia(&dada))
+           {
+               apilar(&aux, desapilar(&dada));
+           }
+           apilar(&par, desapilar(&aux));
+        }
+        else //Re apilo DADA y AUX, tengo que seguir comparando
+        {
+             while(!pilavacia(&aux2))
+           {
+               apilar(&dada, desapilar(&aux2));
+           }
+            while(!pilavacia(&aux3))
+           {
+               apilar(&aux, desapilar(&aux3));
+           }
+        }
+    }
+
+    //MUESTRO PILAS EN PANTALLA
+
+    printf("\n\nPILA AUX\n");
+    mostrar(&aux);
+
+    printf("\n\nPILA PAR\n");
+    mostrar(&par);
+
+    printf("\n\nPILA IMPAR\n");
+    mostrar(&impar);
+
+    return 0;
+}
