@@ -1,0 +1,89 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include "pila.h"
+
+/*Dada la pila ORIGEN ordenarla en forma ascendente por método de ​inserción ​dejando el
+resultado en la pila ORIGEN. Para este ejercicio usar lo aprendido para el ejercicio 5.*/
+
+
+int main()
+{
+    Pila origen, auxOrigen, aux1, aux2;
+    int i, limitePilas, numRandom, cantidad;
+
+    inicpila(&origen);
+    inicpila(&auxOrigen);
+    inicpila(&aux1);
+    inicpila(&aux2);
+
+    srand(time(NULL));
+
+    //Cargamos pila ORIGEN
+
+    i=0;
+    limitePilas = (rand()%11);
+
+    while(i<limitePilas)
+    {
+        numRandom = (rand()%10) +1;
+        apilar(&origen, numRandom);
+        i++;
+    }
+
+    printf("\n\nPILA ORIGEN\n");
+    mostrar(&origen);
+
+
+    //Contamos los elementos de la pila ORIGEN
+
+    cantidad=0;
+    while(!pilavacia(&origen)){
+            apilar(&auxOrigen, desapilar(&origen));
+            cantidad++;
+    }
+
+    while(!pilavacia(&auxOrigen))
+    {
+        apilar(&origen, desapilar(&auxOrigen));
+    }
+
+
+    //Ordenemos ORIGEN
+    //ORDENAMOS POR INSERCION
+
+    i=0;
+    while(i<(cantidad-1))
+    {
+        apilar(&auxOrigen, desapilar(&origen));
+        if(tope(&auxOrigen)>tope(&origen))
+        {
+            apilar(&aux1, desapilar(&origen));
+            apilar(&origen, desapilar(&auxOrigen));
+            while(!pilavacia(&auxOrigen) && tope(&aux1)<=tope(&auxOrigen))
+            {
+                apilar(&aux2, desapilar(&auxOrigen));
+            }
+            apilar(&auxOrigen, desapilar(&aux1));
+            while(!pilavacia(&aux2))
+            {
+                apilar(&auxOrigen, desapilar(&aux2));
+            }
+        }
+        i++;
+    }
+
+    while(!pilavacia(&auxOrigen))
+    {
+        apilar(&origen, desapilar(&auxOrigen));
+    }
+
+
+    //Mostramos ORIGEN Ordenada
+
+    printf("\n\nPILA ORIGEN ORDENADA\n");
+    mostrar(&origen);
+
+
+    return 0;
+}
