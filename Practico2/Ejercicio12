@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include "pila.h"
+
+/*Dada la pila ORIGEN ordenarla en forma ascendente por método de ​inserción ​dejando el
+resultado en la pila ORIGEN. Para este ejercicio usar lo aprendido para el ejercicio 5.*/
+
+
+int main()
+{
+    Pila origen, auxOrigen, aux;
+    int i, limitePilas, numRandom;
+
+    inicpila(&origen);
+    inicpila(&auxOrigen);
+    inicpila(&aux);
+
+    srand(time(NULL));
+
+    //Cargamos pila ORIGEN
+
+    i=0;
+    limitePilas = (rand()%11);
+
+    while(i<limitePilas)
+    {
+        numRandom = (rand()%10) +1;
+        apilar(&origen, numRandom);
+        i++;
+    }
+
+    printf("\n\nPILA ORIGEN\n");
+    mostrar(&origen);
+
+    //Ordenemos ORIGEN
+    //ORDENAMOS POR INSERCION
+
+    if(!pilavacia(&origen))
+    {
+        apilar(&auxOrigen, desapilar(&origen));
+
+        while(!pilavacia(&origen))
+        {
+
+            if(tope(&origen)>=tope(&auxOrigen))
+            {
+                apilar(&auxOrigen, desapilar(&origen));
+            }
+            else
+            {
+                apilar(&aux, desapilar(&origen));
+                while(!pilavacia(&auxOrigen))
+                {
+                    apilar(&origen, desapilar(&auxOrigen));
+                }
+                apilar(&auxOrigen, desapilar(&aux));
+            }
+        }
+
+    }
+
+    while(!pilavacia(&auxOrigen))
+    {
+        apilar(&origen, desapilar(&auxOrigen));
+    }
+
+
+    //Mostramos ORIGEN Ordenada
+
+    printf("\n\nPILA ORIGEN ORDENADA\n");
+    mostrar(&origen);
+
+
+    return 0;
+}
