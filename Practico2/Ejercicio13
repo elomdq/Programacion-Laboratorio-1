@@ -1,0 +1,203 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include "pila.h"
+
+/*Suponer un juego de cartas en el que en cada mano se reparten dos cartas por jugador. Un
+jugador gana la mano cuando la suma de sus cartas es mayor que las del contrario y al
+hacerlo coloca todas las cartas (las de él y las de su rival) en su pila de puntos. En caso de
+empate (y para simplificar) siempre gana el jugador1. Simular la ejecución del juego de tal
+manera que dada una pila MAZO (con un número de elementos múltiplo de cuatro)
+distribuya las cartas en las pilas PUNTOSJUG1 y PUNTOSJUG2 como si estos hubieran
+jugado. Utilizar las pilas auxiliares que crea conveniente.*/
+
+
+int main()
+{
+    Pila mazo, manoJ1, manoJ2, puntosJug1, puntosJug2, aux;
+    int i, contador, numRandom, suma1, suma2;
+
+    inicpila(&mazo);
+    inicpila(&manoJ1);
+    inicpila(&manoJ2);
+    inicpila(&puntosJug1);
+    inicpila(&puntosJug2);
+    inicpila(&aux);
+
+    srand(time(NULL));
+    suma1=0;
+    suma2=0;
+
+    //CARGAMOS LA PILA MAZO Y MEZCLADO
+
+    i=0;
+
+    while(i<48)
+    {
+        contador=0;
+        numRandom = (rand()%12) +1;
+        while(!pilavacia(&mazo))
+        {
+            if(tope(&mazo)==numRandom)
+            {
+                contador++;
+            }
+            apilar(&aux,desapilar(&mazo));
+        }
+        while(!pilavacia(&aux))
+        {
+            apilar(&mazo, desapilar(&aux));
+        }
+        if(contador<4)
+        {
+            apilar(&mazo, numRandom);
+            i++;
+        }
+        if(pilavacia(&mazo))
+        {
+            apilar(&mazo, numRandom);
+        }
+    }
+
+    printf("\n\nMAZO\n");
+    mostrar(&mazo);
+
+    printf("\n");
+    system("pause");
+    system("cls");
+
+
+    //DESARROLLO DEL JUEGO
+
+    contador=1;
+
+    while(!pilavacia(&mazo))
+    {
+
+        printf("\nRONDA N%c %d \n\n", 167, contador);
+
+        for(i=0; i<2; i++) //REPARTIMOS LAS CARTAS
+        {
+            apilar(&manoJ1, desapilar(&mazo));
+            apilar(&manoJ2, desapilar(&mazo));
+        }
+
+        while(!pilavacia(&manoJ1)) //SUMAMOS LOS PUNTOS DE LA MANO DEL JUGADOR 1
+        {
+            suma1=suma1+tope(&manoJ1);
+            apilar(&aux, desapilar(&manoJ1));
+        }
+        while(!pilavacia(&aux))
+        {
+            apilar(&manoJ1, desapilar(&aux));
+        }
+
+
+        while(!pilavacia(&manoJ2)) //SUMAMOS LOS PUNTOS DE LA MANO DEL JUGADOR 2
+        {
+            suma2=suma2+tope(&manoJ2);
+            apilar(&aux, desapilar(&manoJ2));
+        }
+        while(!pilavacia(&aux))
+        {
+            apilar(&manoJ2, desapilar(&aux));
+        }
+
+        mostrar(&manoJ1);
+        printf("\nPUNTOS J1 = %d \n", suma1);
+        mostrar(&manoJ2);
+        printf("\nPUNTOS J2 = %d \n", suma2);
+
+        if(suma1>suma2 || (suma1==suma2 && contador %2 == 1)) //COMPARAMOS LOS PUNTOS Y RESOLVEMOS LA RONDA (en caso de empate gana el mano)
+        {
+            while(!pilavacia(&manoJ1))
+            {
+                apilar(&puntosJug1, desapilar(&manoJ1));
+                apilar(&puntosJug1, desapilar(&manoJ2));
+            }
+        }
+        else
+        {
+            while(!pilavacia(&manoJ2))
+            {
+                apilar(&puntosJug2, desapilar(&manoJ2));
+                apilar(&puntosJug2, desapilar(&manoJ1));
+            }
+        }
+
+        if(suma1>suma2)
+        {
+            printf("\n\nEl JUGADOR 1 gana esta ronda.\n\n");
+        }
+        else if(suma1<suma2)
+        {
+            printf("\n\nEl JUGADOR 2 gana esta ronda.\n\n");
+        }
+        else
+        {
+            if(contador % 2 == 1)
+            {
+                printf("\nEl JUGADOR 1 gana esta ronda por ser mano.\n\n");
+            }
+            else
+            {
+                printf("\nEl JUGADOR 2 gana esta ronda por ser mano.\n\n");
+            }
+        }
+
+
+        //printf("\n %d \n", contador % 2);
+        suma1=0;
+        suma2=0;
+        contador++;
+
+        printf("\n");
+        system("pause");
+        system("cls");
+
+    }
+
+
+    //SUMAMOS LOS PUNTOS TOTALES
+
+    while(!pilavacia(&puntosJug1)) //PUNTOS JUGADOR 1
+    {
+        suma1=suma1+tope(&puntosJug1);
+        apilar(&aux, desapilar(&puntosJug1));
+    }
+    while(!pilavacia(&aux))
+    {
+        apilar(&puntosJug1, desapilar(&aux));
+    }
+
+    while(!pilavacia(&puntosJug2))  //PUNTOS JUGADOR 2
+    {
+        suma2=suma2+tope(&puntosJug2);
+        apilar(&aux, desapilar(&puntosJug2));
+    }
+    while(!pilavacia(&aux))
+    {
+        apilar(&puntosJug2, desapilar(&aux));
+    }
+
+    //MOSTRAMOS LOS PUNTOS FINALES
+
+    printf("\n\nEl jugador 1 hizo %d puntos finales.", suma1);
+    printf("\n\nEl jugador 2 hizo %d puntos finales.", suma2);
+
+    if(suma1>suma2)
+    {
+        printf("\n\nEl ganador es el JUGADOR 1.\n\n");
+    }
+    else if(suma2>suma1)
+    {
+        printf("\n\nEl ganador es el JUGADOR 2.\n\n");
+    }
+    else
+    {
+        printf("\n\nLos jugadores han empatado.\n\n");
+    }
+
+
+    return 0;
+}
