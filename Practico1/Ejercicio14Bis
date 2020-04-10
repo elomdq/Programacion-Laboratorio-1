@@ -1,0 +1,83 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include "pila.h"
+
+int main()
+{
+    /*Determinar si la cantidad de elementos de la pila DADA es par. Si es par, pasar el elemento del tope
+de la pila AUX a la pila PAR y si es impar pasar el tope a la pila IMPAR.*/
+
+    Pila dada, aux, par, impar, aux2, aux3;
+    int i, numRandom, limitePilas;
+
+    inicpila(&dada);
+    inicpila(&aux);
+
+    inicpila(&aux2);
+    inicpila(&aux3);
+
+    inicpila(&par);
+    inicpila(&impar);
+
+    srand(time(NULL));
+
+    /*Cargamos datos en la pila DADA*/
+
+    i=0;
+    limitePilas = (rand()%10) + 1;
+
+    while(i<limitePilas){
+
+        numRandom = (rand()%10) +1;
+        apilar(&dada, numRandom);
+        i++;
+    }
+
+    printf("\n\nPILA DADA INICIAL\n");
+    mostrar(&dada);
+
+
+    /// Voy desapilando DADA en AUX pero antes copio alternadamente los valores en otras 2 pilas AUX2 y AUX3
+
+    while(!pilavacia(&dada))
+    {
+        apilar(&aux2, tope(&dada));
+        apilar(&aux, desapilar(&dada));
+        if(!pilavacia(&dada))
+        {
+            apilar(&aux3, tope(&dada));
+            apilar(&aux, desapilar(&dada));
+        }
+    }
+
+    ///Comparamos la cantidad de valores entre ambas pilas sin usar contadores
+
+    while(!pilavacia(&aux2) && !pilavacia(&aux3)){
+        desapilar(&aux2);
+        desapilar(&aux3);
+    }
+
+    if(pilavacia(&aux2) && pilavacia(&aux3)){
+        ///es par
+        apilar(&par, desapilar(&aux));
+    }
+    else
+    {
+        ///es impar
+        apilar(&impar, desapilar(&aux));
+    }
+
+    ///MUESTRO PILAS EN PANTALLA
+
+    printf("\n\nPILA AUX\n");
+    mostrar(&aux);
+
+    printf("\n\nPILA PAR\n");
+    mostrar(&par);
+
+    printf("\n\nPILA IMPAR\n");
+    mostrar(&impar);
+
+    return 0;
+}
