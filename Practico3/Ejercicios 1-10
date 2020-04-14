@@ -1,0 +1,700 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <conio.h>
+#include <time.h>
+#include <windows.h>
+#include "pila.h"
+#include <math.h>
+
+/* 1. Hacer una función que permita ingresar varios elementos a una Pila, tantos como quiera el
+usuario */
+
+// Hice dos funciones de carga una para cargar por pantalla y una para que se genere automaticamente.
+
+void cargarPilaRandom(Pila * pPila);
+void cargarPilaPantalla(Pila * pPila);
+
+//Funcion que carga una pila pero antes consulta si se quiere hacer por pantalla o aleatoria.
+
+void cargarPila(Pila * pPila);
+
+
+/* 2. Hacer una función que pase todos los elementos de una pila a otra. */
+
+void pasajeDePila(Pila * pOrigen, Pila * pDestino);
+
+/* 3. Hacer una función que pase todos los elementos de una pila a otra, pero conservando el orden. */
+
+void pasarConMismoOrden(Pila * pOrigen, Pila * pDestino);
+
+/* 4. Hacer una función que encuentre el menor elemento de una pila y lo retorne. La
+misma debe eliminar ese dato de la pila. */
+
+int encontrarMenor(Pila * pPila);
+void eliminarMenor(Pila * pPila, int elemento);
+
+/* 5. Hacer una función que pase los elementos de una pila a otra, de manera que se genere una
+nueva pila ordenada. ​Usar la función del ejercicio 4​.​*/ /// (Ordenamiento por selección)
+
+void pasarOrdenada(Pila * pPila, Pila * pOrdenada);
+
+/* 6. Hacer una función que inserte en una pila ordenada un nuevo elemento, conservando el orden
+de ésta. */
+
+void ordenarPila(Pila * pPila);
+void insertarElemento(Pila * pPila, int elemento);
+
+/* 7. Hacer una función que pase los elementos de una pila a otra, de manera que se genere una
+nueva pila ordenada. ​Usar la función del ejercicio 6​. */ ///​ (Ordenamiento por inserción)
+
+void ordenarPorInsercion(Pila * pPila, Pila * pOrdenada);
+
+/* 8. Hacer una función que sume y retorne los dos primeros elementos de una pila (tope y anterior),
+sin alterar su contenido. */
+
+int suma2Ultimos(Pila * pPila);
+
+/* 9. Hacer una función que calcule el promedio de los elementos de una pila, para ello hacer también
+una función que calcule la suma, otra para la cuenta y otra que divida. En total son cuatro
+funciones, y la función que calcula el promedio invoca a las otras 3. */
+
+int sumaElementos(Pila * pPila);
+int cantidadElementos(Pila * pPila);
+float division(int a, int b);
+float promedioPila(Pila * pPila);
+
+
+/* 10. Hacer una función que reciba una pila con números de un solo dígito (es responsabilidad de
+quien usa el programa) y que transforme esos dígitos en un número decimal.  */
+
+double retornaDecimal(Pila * pPila);
+
+///Funciones que hice para modificar la generacion aleatoria de los valores de la pila
+void cargarPilaRandomValores1Digito(Pila * pPila);
+void cargarPilaConValores1Digito(Pila * pPila);
+
+
+
+int main()
+{
+    Pila a, b, aux;
+    int numMenu=0, i=0, elemento=0;
+    char c;
+
+    inicpila(&a);
+    inicpila(&b);
+    inicpila(&aux);
+
+    printf("\nBienvenido, elige una de las opciones del men%c.\n", 163);
+    printf("\n1 - Cargar pila.");
+    printf("\n2 - Pasar una pila Origen a otra Destino.");
+    printf("\n3 - Pasar una pila Origen a otra Destino, conservando el mismo orden.");
+    printf("\n4 - Eliminar el menor elemento de una pila.");
+    printf("\n5 - Pasar los elementos de manera ordenada de una pila a otra nueva.");
+    printf("\n6 - Insertar elemento en una pila ordenada.");
+    printf("\n7 - Ordenar una pila en otra por inserci%cn.", 162);
+    printf("\n8 - Sumar el tope de pila con el elemento siguiente.");
+    printf("\n9 - Calcular valor promedio de una pila.");
+    printf("\n10 - Transformar a n%cmero decimal los elementos de la pila.",163);
+    printf("\n\n");
+    scanf("%d", &numMenu);
+
+    system("cls");
+
+    switch(numMenu)
+    {
+    case 1:
+
+        cargarPila(&a);
+
+        printf("\n\nPILA A\n");
+        mostrar(&a);
+        break;
+
+    case 2:
+        printf("Primero debes generar la pila de Origen. Como quieres hacerlo?\n");
+
+        cargarPila(&a);
+
+        printf("\n\nPILA ORIGEN\n");
+        mostrar(&a);
+
+        printf("\n");
+        system("pause");
+
+        printf("\nPasando Pila");
+        for(i=0; i<4; i++)
+        {
+            Sleep(600);
+            printf(".");
+        }
+
+        system("cls");
+
+        pasajeDePila(&a, &b);
+
+        printf("\n\nPILA ORIGEN\n");
+        mostrar(&a);
+
+        printf("\n\nPILA DESTINO\n");
+        mostrar(&b);
+
+        break;
+
+    case 3:
+        printf("Primero debes generar la pila de Origen. Como quieres hacerlo?\n");
+
+        cargarPila(&a);
+
+        printf("\n\nPILA ORIGEN\n");
+        mostrar(&a);
+
+        printf("\n");
+        system("pause");
+
+        printf("\nPasando Pila");
+        for(i=0; i<4; i++)
+        {
+            Sleep(600);
+            printf(".");
+        }
+
+        system("cls");
+
+        pasarConMismoOrden(&a, &b);
+
+        printf("\n\nPILA ORIGEN\n");
+        mostrar(&a);
+
+        printf("\n\nPILA DESTINO\n");
+        mostrar(&b);
+
+        break;
+
+    case 4:
+        printf("Primero debes generar la pila de Origen. Como quieres hacerlo?\n");
+
+        cargarPila(&a);
+
+        printf("\n\nPILA ORIGEN\n");
+        mostrar(&a);
+
+        printf("\n\nEl menor elemento de la pila es el: %d\n\n", encontrarMenor(&a));
+
+        system("pause");
+        system("cls");
+
+        printf("Eliminando elemento");
+        for(i=0; i<4; i++)
+        {
+            Sleep(500);
+            printf(".");
+        }
+
+        system("cls");
+
+        eliminarElemento(&a, encontrarMenor(&a));
+
+        printf("\nElemento eliminado");
+        printf("\n\nPILA ORIGEN\n");
+        mostrar(&a);
+
+        break;
+
+    case 5:
+
+        printf("Primero debes generar la pila de Origen. Como quieres hacerlo?\n");
+
+        cargarPila(&a);
+
+        printf("\n\nPILA A\n");
+        mostrar(&a);
+
+        printf("\n");
+        system("pause");
+
+        pasarOrdenada(&a, &b);
+
+        printf("Pasando Pila");
+        for(i=0; i<4; i++)
+        {
+            Sleep(500);
+            printf(".");
+        }
+
+        system("cls");
+        printf("\nElementos pasados y ordenados:\n");
+
+        printf("\nPILA A");
+        mostrar(&a);
+
+        printf("\nPILA B ORDENADA");
+        mostrar(&b);
+
+
+        break;
+
+    case 6:
+
+        printf("Primero debes generar una pila. Como quieres hacerlo?\n");
+
+        cargarPila(&a);
+
+        printf("\n\nPILA A\n");
+        mostrar(&a);
+
+        system("pause");
+        system("cls");
+
+        ordenarPila(&a);
+
+        printf("Ordenando Pila");
+        for(i=0; i<4; i++)
+        {
+            Sleep(500);
+            printf(".");
+        }
+        system("cls");
+
+        printf("\n\nPILA A\n");
+        mostrar(&a);
+
+        printf("\nIngrese el elemento a insertar en la pila: ");
+        scanf("%d", &elemento);
+
+        insertarElemento(&a, elemento);
+
+        system("cls");
+
+        printf("\n\nElemento insertado.\n");
+        mostrar(&a);
+
+        break;
+
+    case 7:
+
+        printf("Primero debes generar una pila. Como quieres hacerlo?\n");
+
+        cargarPila(&a);
+
+        printf("\n\nPILA A\n");
+        mostrar(&a);
+
+        system("pause");
+        system("cls");
+
+        ordenarPorInsercion(&a, &b);
+
+        printf("Ordenando Pila");
+        for(i=0; i<4; i++)
+        {
+            Sleep(500);
+            printf(".");
+        }
+        system("cls");
+
+        printf("\n\nPILA A\n");
+        mostrar(&a);
+        printf("\n\nPILA B - Ordenada\n");
+        mostrar(&b);
+
+        break;
+
+    case 8:
+
+        printf("Primero debes generar una pila. Como quieres hacerlo?\n");
+
+        cargarPila(&a);
+
+        printf("\n\nPILA A\n");
+        mostrar(&a);
+
+        system("pause");
+        system("cls");
+
+        printf("\nLa suma del tope y su siguiente da como resultado: %d \n\n", suma2Ultimos(&a));
+
+        printf("\n\nPILA A\n");
+        mostrar(&a);
+
+        break;
+
+    case 9:
+
+        printf("Primero debes generar una pila. Como quieres hacerlo?\n");
+
+        cargarPila(&a);
+
+        printf("\n\nPILA A\n");
+        mostrar(&a);
+
+        system("pause");
+        system("cls");
+
+        printf("\nEl resultado promedio de la pila es: %.2f \n\n", promedioPila(&a));
+
+        break;
+
+    case 10:
+
+        printf("Primero debes generar una pila. Como quieres hacerlo?\n");
+
+        cargarPilaConValores1Digito(&a);
+
+        printf("\n\nPILA A\n");
+        mostrar(&a);
+
+        system("pause");
+
+        printf("\n\nEl n%cmero decimal formado es: %.2lf \n\n", 163, retornaDecimal(&a));
+
+
+        break;
+    }
+
+    return 0;
+}
+
+
+/// FUNCIONES ///
+
+/// Ejercicio 1
+
+void cargarPila(Pila * pPila)
+{
+    int numMenu, i=0;
+
+    printf("\n1 - Cargar pila de manera random.");
+    printf("\n2 - Cargar pila por pantalla.");
+    printf("\n\n");
+    scanf("%d", &numMenu);
+    system("cls");
+
+    if(numMenu == 1)
+    {
+        cargarPilaRandom(pPila);
+
+        printf("Generando Pila");
+        for(i=0; i<4; i++)
+        {
+            Sleep(500);
+            printf(".");
+        }
+        system("cls");
+    }
+    else
+    {
+        cargarPilaPantalla(pPila);
+    }
+}
+
+void cargarPilaRandom(Pila * pPila)
+{
+    int i=0, limitePilas, numRandom;
+
+    srand(time(NULL));
+
+    limitePilas = (rand()%10) +1;
+
+    while(i<limitePilas)
+    {
+        numRandom = (rand()%20) +1;
+        apilar(pPila, numRandom);
+        i++;
+    }
+}
+
+void cargarPilaPantalla(Pila * pPila)
+{
+    char c;
+
+    do
+    {
+        printf("\n");
+        leer(pPila);
+        printf("\nDesea cargar otro elemento en la pila? s/n\n");
+        fflush(stdin);
+        c = getch();
+        system("cls");
+    }
+    while(c == 's');
+}
+
+
+/// Ejercicio 2
+
+void pasajeDePila(Pila * pOrigen, Pila * pDestino)
+{
+    while(!pilavacia(pOrigen))
+    {
+        apilar(pDestino, desapilar(pOrigen));
+    }
+}
+
+
+/// Ejercicio 3
+
+void pasarConMismoOrden(Pila * pOrigen, Pila * pDestino)
+{
+    Pila aux;
+    inicpila(&aux);
+
+    pasajeDePila(pOrigen, &aux);
+    pasajeDePila(&aux, pDestino);
+}
+
+
+/// Ejercicio 4
+
+int encontrarMenor(Pila * pPila)
+{
+    Pila aux;
+    int menor;
+
+    inicpila(&aux);
+
+    if(!pilavacia(pPila))
+    {
+        menor=tope(pPila);
+        while(!pilavacia(pPila))
+        {
+            if(tope(pPila)<menor)
+            {
+                menor=tope(pPila);
+            }
+            else
+            {
+                apilar(&aux, desapilar(pPila));
+            }
+        }
+    }
+
+    pasajeDePila(&aux, pPila);
+
+    return menor;
+}
+
+void eliminarElemento(Pila * pPila, int elemento)
+{
+    Pila eliminados, aux;
+
+    inicpila(&eliminados);
+    inicpila(&aux);
+
+    while(!pilavacia(pPila) && tope(pPila)!=elemento)
+    {
+        apilar(&aux, desapilar(pPila));
+    }
+
+    if(!pilavacia(pPila))
+    {
+        apilar(&eliminados, desapilar(pPila));
+    }
+
+    pasajeDePila(&aux, pPila);
+}
+
+/// Ejercicio 5
+
+void pasarOrdenada(Pila * pPila, Pila * pOrdenada)
+{
+    Pila aux;
+
+    inicpila(&aux);
+
+    while(!pilavacia(pPila))
+    {
+        apilar(pOrdenada, encontrarMenor(pPila));
+        eliminarElemento(pPila, encontrarMenor(pPila));
+    }
+}
+
+/// Ejercicio 6
+
+void ordenarPila(Pila * pPila)
+{
+    Pila aux;
+
+    inicpila(&aux);
+
+    pasarOrdenada(pPila, &aux);
+
+    pasajeDePila(&aux, pPila);
+}
+
+void insertarElemento(Pila * pPila, int elemento)
+{
+    Pila aux;
+
+    inicpila(&aux);
+
+    while(!pilavacia(pPila) && tope(pPila)<elemento)
+    {
+        apilar(&aux, desapilar(pPila));
+    }
+
+    apilar(pPila, elemento);
+
+    pasajeDePila(&aux, pPila);
+}
+
+
+///Ejercicio 7
+
+void ordenarPorInsercion(Pila * pPila, Pila * pOrdenada)
+{
+    while(!pilavacia(pPila))
+    {
+        insertarElemento(pOrdenada, desapilar(pPila));
+    }
+}
+
+/// Ejercicio 8
+
+int suma2Ultimos(Pila * pPila)
+{
+    int resultado=0, i;
+    Pila aux;
+
+    inicpila(&aux);
+
+    for(i=0; i<2; i++)
+    {
+        if(!pilavacia(pPila))
+        {
+            resultado=resultado + tope(pPila);
+            apilar(&aux, desapilar(pPila));
+        }
+    }
+
+    pasajeDePila(&aux, pPila);
+
+    return resultado;
+}
+
+
+/// Ejercicio 9
+
+int sumaElementos(Pila * pPila)
+{
+    int suma=0;
+    Pila aux;
+
+    inicpila(&aux);
+
+    while(!pilavacia(pPila))
+    {
+        suma = suma + tope(pPila);
+        apilar(&aux, desapilar(pPila));
+    }
+
+    pasajeDePila(&aux, pPila);
+
+    return suma;
+}
+
+int cantidadElementos(Pila * pPila)
+{
+    int cantidad=0;
+    Pila aux;
+
+    inicpila(&aux);
+
+    while(!pilavacia(pPila))
+    {
+        cantidad++;
+        apilar(&aux, desapilar(pPila));
+    }
+
+    pasajeDePila(&aux, pPila);
+
+    return cantidad;
+}
+
+float division(int a, int b)
+{
+    float resultado  = (float) a / (float) b;
+
+    return resultado;
+}
+
+float promedioPila(Pila * pPila)
+{
+    float resultado = division(sumaElementos(pPila), cantidadElementos(pPila));
+
+    return resultado;
+}
+
+
+/// Ejercicio 10
+
+double retornaDecimal(Pila * pPila)
+{
+    int i, cantidad;
+    double resultado=0;
+    Pila aux;
+
+    inicpila(&aux);
+
+    cantidad = cantidadElementos(pPila);
+    i=1;
+
+    while(!pilavacia(pPila))
+    {
+        resultado = resultado + tope(pPila)*pow(10,cantidad-i);
+        apilar(&aux, desapilar(pPila));
+        i++;
+    }
+
+    pasajeDePila(&aux, pPila);
+
+    return resultado;
+}
+
+
+/// Extras
+
+
+void cargarPilaRandomValores1Digito(Pila * pPila)
+{
+    int i=0, limitePilas, numRandom;
+
+    srand(time(NULL));
+
+    limitePilas = (rand()%10) +1;
+
+    while(i<limitePilas)
+    {
+        numRandom = (rand()%10);
+        apilar(pPila, numRandom);
+        i++;
+    }
+}
+
+void cargarPilaConValores1Digito(Pila * pPila)
+{
+    int numMenu, i=0;
+
+    printf("\n1 - Cargar pila de manera random.");
+    printf("\n2 - Cargar pila por pantalla.");
+    printf("\n\n");
+    scanf("%d", &numMenu);
+    system("cls");
+
+    if(numMenu == 1)
+    {
+        cargarPilaRandomValores1Digito(pPila);
+
+        printf("Generando Pila");
+        for(i=0; i<4; i++)
+        {
+            Sleep(500);
+            printf(".");
+        }
+        system("cls");
+    }
+    else
+    {
+        cargarPilaPantalla(pPila);
+    }
+}
