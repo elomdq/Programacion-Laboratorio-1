@@ -462,10 +462,7 @@ int encontrarMenor(Pila * pPila)
             {
                 menor=tope(pPila);
             }
-            else
-            {
-                apilar(&aux, desapilar(pPila));
-            }
+            apilar(&aux, desapilar(pPila));
         }
     }
 
