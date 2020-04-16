@@ -31,7 +31,7 @@ void pasarConMismoOrden(Pila * pOrigen, Pila * pDestino);
 misma debe eliminar ese dato de la pila. */
 
 int encontrarMenor(Pila * pPila);
-void eliminarMenor(Pila * pPila, int elemento);
+void eliminarElemento(Pila * pPila, int elemento);
 
 /* 5. Hacer una función que pase los elementos de una pila a otra, de manera que se genere una
 nueva pila ordenada. ​Usar la función del ejercicio 4​.​*/ /// (Ordenamiento por selección)
