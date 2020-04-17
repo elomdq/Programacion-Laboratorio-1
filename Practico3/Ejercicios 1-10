@@ -555,13 +555,10 @@ int suma2Ultimos(Pila * pPila)
 
     inicpila(&aux);
 
-    for(i=0; i<2; i++)
+    for(i=0; i<2 && !pilavacia(pPila); i++)
     {
-        if(!pilavacia(pPila))
-        {
-            resultado=resultado + tope(pPila);
-            apilar(&aux, desapilar(pPila));
-        }
+        resultado=resultado + tope(pPila);
+        apilar(&aux, desapilar(pPila)); 
     }
 
     pasajeDePila(&aux, pPila);
