@@ -69,7 +69,7 @@ double retornaDecimal(Pila * pPila);
 void cargarPilaRandomValores1Digito(Pila * pPila);
 void cargarPilaConValores1Digito(Pila * pPila);
 
-///Funciones EXTRA
+///Funciones parar avisos al usuario
 void avisoDeCarga(); //Para avisar al usuario carga de pila o elementos
 void avisoDeEliminacion(); //Para avisar que se esta eliminando elemento
 void avisoDeOrdenamiento(); //Para avisar que se esta ordenando pila
