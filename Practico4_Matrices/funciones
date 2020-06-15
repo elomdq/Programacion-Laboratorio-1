@@ -1,0 +1,350 @@
+///**************************************************************************************************///
+///                                            Funciones                                             ///
+///**************************************************************************************************///
+
+
+void cargarMatrizCompleta(int filas, int columnas, int matriz[][columnas])
+{
+    int i, j ;
+
+    for(i=0; i<filas; i++)
+    {
+        for(j=0; j<columnas; j++)
+        {
+            printf("Indique el n%cmero a agregar: ", 163);
+            scanf("%d", &matriz[i][j]);
+        }
+    }
+}
+
+
+void mostrarMatrizCompleta(int filas, int columnas, int matriz[][columnas])
+{
+    int i, j;
+
+    for(i=0; i<filas; i++)
+    {
+        for(j=0; j<columnas; j++)
+        {
+            printf("%d | ", matriz[i][j]);
+        }
+
+        printf("\n");
+    }
+}
+
+
+void cargarMatrizCompletaRandom(int filas, int columnas, int matriz[][columnas])
+{
+    int i, j, num;
+
+    srand(time(NULL));
+
+    for(i=0; i<filas; i++)
+    {
+        for(j=0; j<columnas; j++)
+        {
+            num = rand()%20;
+            matriz[i][j] = num;
+        }
+    }
+}
+
+int sumaMatrizInt(int filas, int columnas, int matriz[][columnas])
+{
+    int i, j, suma=0;
+
+    for(i=0; i<filas; i++)
+    {
+        for(j=0; j<columnas; j++)
+        {
+            suma = suma + matriz[i][j];
+        }
+    }
+
+    return suma;
+}
+
+/* Modificacion */
+int sumaMatrizInt2(int filas, int columnas, int matriz[][columnas])
+{
+    int i, suma=0;
+
+    for(i=0; i<filas; i++)
+    {
+
+        suma = suma + sumaDeElementos(matriz[i], columnas);
+
+    }
+
+    return suma;
+}
+
+
+int sumaDeElementos(int a[], int validos)
+{
+
+    int i, suma=0;
+
+    for(i=0; i<validos; i++)
+    {
+        suma = suma + a[i];
+    }
+
+    return suma;
+}
+
+
+
+
+
+float promedioDeMatrizInt(int filas, int columnas, int matriz[][columnas])
+{
+    float promedio;
+    int suma=0;
+    int cantidadElementos = filas*columnas;
+
+    suma=sumaMatrizInt(filas, columnas, matriz);
+
+    promedio = ((float)suma/(float)cantidadElementos);
+
+    return promedio;
+}
+
+bool encontrarIntenMatriz(int filas, int columnas, int matriz[][columnas], int valor)
+{
+    int i=0, j=0;
+    bool flag=0;
+
+    while(i<filas && flag!=1)
+    {
+        while(j<columnas && flag!=1)
+        {
+            if(matriz[i][j]==valor)
+            {
+                flag=1;
+            }
+
+            j++;
+        }
+
+        j=0;
+        i++;
+    }
+
+    return flag;
+}
+
+
+int cargarArregloStringTeclado(int dimension, int letras, char matrizChar[][letras])
+{
+    int i=0;
+    char c='s';
+
+    while(i<dimension && c!='n')
+    {
+
+        printf("\nIngrese una palabra: ");
+        fflush(stdin);
+        scanf("%s", &matrizChar[i]);
+
+        printf("\nDesea cargar otra palabra mas? s/n ");
+        fflush(stdin);
+        c = _getch();
+
+
+
+        i++;
+
+    }
+
+    return i;
+}
+
+
+void mostrarArregloStrings(int validos, int letras, char matriz[][letras])
+{
+    int i;
+
+    for(i=0; i<validos; i++)
+    {
+        printf("%s \n", matriz[i]);
+    }
+}
+
+bool encontrarPalabraEnArreglo(int validos, int letras, char matrizChar[][letras], char  palabra[letras])
+{
+    int i=0, comparativa=1;
+    bool flag=0;
+
+    while(i<validos && comparativa!=0)
+    {
+        comparativa = strcmp(palabra, matrizChar[i]);
+        i++;
+    }
+
+    if(comparativa==0)
+    {
+        flag = 1;
+    }
+
+    return flag;
+}
+
+void ordenarAlfabeticamente(int validos, int letras, char matrizChar[][letras])
+{
+    int i;
+
+    for(i=0; i<validos-1; i++)
+    {
+        insertarString(i, letras, matrizChar, matrizChar[i+1]);
+    }
+}
+
+
+void insertarString(int validos, int letras, char matrizChar[][letras], char palabra[])
+{
+    int i=validos;
+    char *copia = (char *) malloc(strlen(palabra)*sizeof(char));
+
+    strcpy(copia, palabra);
+
+    while(i>=0 && (strcmp(matrizChar[i], copia)>0))
+    {
+        strcpy(matrizChar[i+1],matrizChar[i]);
+        i--;
+    }
+
+    strcpy(matrizChar[i+1],copia);
+}
+
+
+void cargarMatrizFloatCompleta(int filas, int columnas, float matrizFloat[][columnas])
+{
+    int i, j ;
+
+    for(i=0; i<filas; i++)
+    {
+        for(j=0; j<columnas; j++)
+        {
+            printf("Indique el n%cmero a agregar: ", 163);
+            scanf("%f", &matrizFloat[i][j]);
+        }
+    }
+}
+
+void mostrarMatrizFloatCompleta(int filas, int columnas, float matrizFloat[][columnas])
+{
+    int i, j;
+
+    for(i=0; i<filas; i++)
+    {
+        for(j=0; j<columnas; j++)
+        {
+            printf("%.2f | ", matrizFloat[i][j]);
+        }
+
+        printf("\n");
+    }
+}
+void mostrarMatrizFloatCompleta2(int filas, int columnas, float ** matrizFloat)
+{
+    int i, j;
+
+    for(i=0; i<filas; i++)
+    {
+        for(j=0; j<columnas; j++)
+        {
+            printf("%.2f | ", matrizFloat[i][j]);
+        }
+
+        printf("\n");
+    }
+}
+
+float determinanteDeMatrizFloat(int filas, int columnas, float matrizFloat[][columnas])
+{
+    float i=(matrizFloat[0][0]*matrizFloat[1][1])-(matrizFloat[0][1]*matrizFloat[1][0]);
+
+    return i;
+}
+
+
+bool consultaInversa(int filas, int columnas, float matrizFloat[][columnas])
+{
+    bool flag=0;
+
+    if(determinanteDeMatrizFloat(filas, columnas, matrizFloat)!=0)
+    {
+        flag=1;
+    }
+
+    return flag;
+}
+
+
+float ** multiplicaMatrizFloat(int filas, int columnas, float matrizFloat[][columnas], int columnas2, float matrizFloat2[][columnas2])
+{
+    int i=0, j=0, k=0;
+//    float matrizResultante[filas][columnas2], coeficiente=0;
+    float ** matrizResultante = malloc(sizeof(float *)*filas);
+    float coeficiente=0;
+
+    for(i=0; i<columnas2; i++)
+    {
+        matrizResultante[i]=malloc(sizeof(float)*columnas2);
+    }
+
+    for(i=0; i<filas; i++)
+    {
+        printf("\ni = %d\n", i);
+        for(k=0; k<columnas2; k++)
+        {
+            printf("\nk = %d\n", k);
+            for(j=0; j<columnas; j++)
+            {
+                printf("\nj = %d\n", j);
+                coeficiente = coeficiente + (matrizFloat[i][j]*matrizFloat2[j][k]);
+                printf("\nCoef. = %f\n", coeficiente);
+            }
+
+            matrizResultante[i][k] = coeficiente;
+            printf("\nmatrizResultante[%d][%d] = %.2f \n", i, k, matrizResultante[i][k]);
+            coeficiente = 0;
+        }
+    }
+
+    return matrizResultante;
+}
+
+
+float ** matrizInversa2x2(float matrizFloat[][2])
+{
+    int i=0, j=0, k=1, l=1;
+    float ** matrizInversa = malloc(sizeof(float *)*2);
+    for(i=0; i<2; i++)
+    {
+        matrizInversa[i]=malloc(sizeof(float)*2);
+    }
+
+    for(i=0; i<2; i++)
+    {
+        for(j=0; j<2; j++)
+        {
+            if((i+j)%2==0)
+            {
+                matrizInversa[i][j]=matrizFloat[k][l]/determinanteDeMatrizFloat(2,2,matrizFloat);
+            }
+            else
+            {
+                matrizInversa[i][j]=-1*(matrizFloat[k][l]/determinanteDeMatrizFloat(2,2,matrizFloat));
+            }
+            k--;
+        }
+        k=1;
+        l--;
+    }
+
+    return matrizInversa;
+}
+
