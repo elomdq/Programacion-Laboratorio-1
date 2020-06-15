@@ -1,0 +1,247 @@
+void agregarInt_Archivo(char nombreArch[], int valor)
+{
+    FILE *archivo;
+    archivo = fopen(nombreArch, "ab");
+
+    if(archivo == NULL)
+    {
+        printf("No se pudo abrir el archivo.");
+    }
+    else
+    {
+        fwrite(&valor, sizeof(int), 1, archivo);
+        fclose(archivo);
+    }
+}
+
+void mostrar_Archivo(char nombreArch[])
+{
+    FILE *archivo = NULL;
+
+    int valor=0;
+
+    archivo = fopen(nombreArch, "rb");
+    if(archivo == NULL)
+    {
+        printf("No se pudo abrir el archivo.");
+    }
+    else
+    {
+        while(!feof(archivo))
+        {
+            if(fread(&valor, sizeof(int), 1, archivo)>0)
+            {
+                printf("%d ", valor);
+            }
+        }
+        fclose(archivo);
+    }
+}
+
+int cantidadDeRegistros_Archivo(char nombreArch[])
+{
+    FILE * archivo = NULL;
+
+    long int registros=0;
+    int aux=0;
+
+    archivo = fopen(nombreArch, "rb");
+
+    if(archivo == NULL)
+    {
+        printf("No se pudo abrir el archivo.");
+    }
+    else
+    {
+        //while(fseek(archivo, sizeof(int),SEEK_SET)==0)
+        while(fread(&aux,sizeof(int),1,archivo)>0)
+        {
+//            if(fseek(archivo, sizeof(int),SEEK_SET)==0)
+//            {
+            registros++;
+//            }
+        }
+        fclose(archivo);
+    }
+
+    return registros;
+}
+
+void cargarAlumnos(char nombreArch[])
+{
+    FILE *archivo = NULL;
+    stAlumno alumnoAux;
+
+    archivo = fopen(nombreArch, "ab");
+
+    // printf("\n Por entrar a la carga...\n");
+
+    if(archivo!=NULL)
+    {
+        printf("\nIngrese el legajo del alumno: ");
+        scanf("%d", &alumnoAux.legajo);
+
+        printf("\nIngrese el nombre y apellido del alumno: ");
+        fflush(stdin);
+        gets(alumnoAux.nombreYapellido);
+
+        printf("\nIngrese la edad del alumno: ");
+        scanf("%d", &alumnoAux.edad);
+
+        printf("\nIngrese el a%co que cursa el alumno: ", 164);
+        scanf("%d", &alumnoAux.anio);
+
+        fwrite(&alumnoAux, sizeof(stAlumno), 1, archivo);
+
+        fclose(archivo);
+    }
+}
+
+void mostrarAlumnos(char nombreArch[])
+{
+    FILE *archivo = NULL;
+    stAlumno alumnoAux;
+
+    archivo = fopen(nombreArch, "rb");
+
+    if(archivo!=NULL)
+    {
+        while(fread(&alumnoAux, sizeof(stAlumno), 1, archivo)>0)
+        {
+            mostrarAlumno(alumnoAux);
+        }
+
+        fclose(archivo);
+    }
+
+}
+
+void mostrarAlumno(stAlumno alumno)
+{
+    printf("-----------------------------------------------\n");
+    printf("\nLegajo del alumno: %d", alumno.legajo);
+    printf("\nNombre y Apellido: %s", alumno.nombreYapellido);
+    printf("\n             Edad: %d", alumno.edad);
+    printf("\n     A%co cursando: %d", 164, alumno.anio);
+    printf("\n");
+
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void pasar_Legajos_A_Pila(char nombreArchivo[], Pila *p)
+{
+    FILE *archivo = NULL;
+
+
+    stAlumno alumnoAux;
+
+    archivo = fopen(nombreArchivo, "rb");
+
+    if(archivo!=NULL)
+    {
+
+        while(!feof(archivo))
+        {
+            if(fread(&alumnoAux, sizeof(stAlumno),1,archivo)>0)
+            {
+                if(alumnoAux.edad>=18)
+                {
+                    apilar(p, alumnoAux.legajo);
+                }
+            }
+        }
+
+        fclose(archivo);
+    }
+}
+
+int cantidadDeRegistros_Alumnos(char nombreArch[])
+{
+    FILE * archivo = NULL;
+
+    long int registros=0;
+    stAlumno alumnoAux;
+
+    archivo = fopen(nombreArch, "rb");
+
+    if(archivo == NULL)
+    {
+        printf("No se pudo abrir el archivo.");
+    }
+    else
+    {
+        //while(fseek(archivo, sizeof(int),SEEK_SET)==0)
+        while(fread(&alumnoAux,sizeof(stAlumno),1,archivo)>0)
+        {
+//            if(fseek(archivo, sizeof(int),SEEK_SET)==0)
+//            {
+            registros++;
+//            }
+        }
+        fclose(archivo);
+    }
+
+    return registros;
+}
+
+
+///////////////////////////////////////EJERCICIO  8
+
+int alumnos_mayores_a_edad(char nombreArchivo[])
+{
+    FILE *archivo = NULL;
+    int edad=0;
+    int i=0;
+
+    stAlumno alumnoAux;
+
+    archivo = fopen(nombreArchivo, "rb");
+
+    if(archivo!=NULL)
+    {
+        printf("Ingrese desde que edad quiere buscar: ");
+        scanf("%d", &edad);
+
+        while(!feof(archivo))
+        {
+            if(fread(&alumnoAux, sizeof(stAlumno),1,archivo)>0)
+            {
+                if(alumnoAux.edad>=edad)
+                {
+                    i++;
+                }
+            }
+        }
+
+        fclose(archivo);
+    }
+
+    return i;
+}
+
+
+//////////////////////////////////////////////////////////
+
+int calcularCantRegistros(char nombreArchivo[],int sizeTipo)
+{
+    FILE *archivo=NULL;
+    long int tamano=0;
+    long int cantRegistros=0;
+
+    archivo = fopen(nombreArchivo, "rb");
+
+    fseek(archivo, 0, SEEK_END);
+
+    if(archivo!= NULL)
+    {
+        tamano = ftell(archivo);
+    }
+
+    cantRegistros = tamano/(long int)sizeTipo;
+
+    fclose(archivo);
+
+    return cantRegistros;
+}
