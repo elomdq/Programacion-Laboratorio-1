@@ -1,0 +1,169 @@
+int cargarAlumno(int dimension, int legajos[], int dimString, char nombres[][dimString], int anios[])
+{
+    int i=0;
+    char c='s';
+
+    while(i<dimension && c!='n')
+    {
+        printf("\nIndique numero de legajo: ");
+        scanf("%d", &legajos[i]);
+        printf("Ingrese el nombre del Alumno: ");
+        fflush(stdin);
+        gets(nombres[i]);
+        printf("Ingrese la edad: ");
+        scanf("%d", &anios[i]);
+
+        i++;
+
+        printf("\nDesea cargar otro alumno? s/n: ");
+        c = _getch();
+
+        printf("\n");
+
+    }
+
+    return i;
+}
+
+void imprimirAlumnos(int validos, int legajos[], int dimString, char nombres[][dimString], int anios[])
+{
+    int i=0;
+
+    for(i=0; i<validos; i++)
+    {
+        printf("-----------------------------------------------------------------\n");
+
+        printf("Legajo nº: %d\n", legajos[i]);
+        printf("Nombre: %s\n", nombres[i]);
+        printf("A%cos: %d\n", 164, anios[i]);
+    }
+
+}
+
+int buscarLegajo(int validos, int legajos[], int valor)
+{
+    int i=0;
+    int posicion= -1;
+
+    while(i<validos && legajos[i]!= valor)
+    {
+        i++;
+    }
+
+    if(i<validos)
+    {
+        posicion = i;
+    }
+
+    return posicion;
+}
+
+
+void imprimirNombreDeLegajo(int validos, int legajos[], int dimString, char nombres[][dimString], int anios[], int valor)
+{
+    int posicion=0;
+
+    posicion = buscarLegajo(validos, legajos, valor);
+
+    if(posicion>0)
+    {
+        printf("Alumno: %s", nombres[posicion]);
+    }
+    else
+    {
+        printf("\nNo se encontró ese legajo.");
+    }
+}
+
+
+void ordenarPorIncersionAlfabeticamente(int validos, int legajos[], int dimString, char nombres[][dimString], int anios[])
+{
+    int i=0;
+    int posicion=0;
+    int aux=0;
+
+    for(i=0; i<validos-1; i++)
+    {
+        posicion = insertarArregloChar(i, dimString, nombres, nombres[i+1]);
+
+        aux = legajos[posicion];
+        legajos[posicion] = legajos[i+1];
+        legajos[i+1] = aux;
+
+        aux = anios[posicion];
+        anios[posicion]=anios[i+1];
+        anios[i+1]=aux;
+    }
+}
+
+
+int insertarArregloChar(int validos, int letras, char arregloPalabras[][letras], char nombre[])
+{
+    int i = validos;
+    char aux[letras];
+
+    strcpy(aux, nombre);
+
+    while(i>=0 && strcmpi(arregloPalabras[i], aux)>0)
+    {
+        strcpy(arregloPalabras[i+1],arregloPalabras[i]);
+        i--;
+    }
+
+    strcpy(arregloPalabras[i+1],aux);
+
+    return (i+1);
+}
+
+
+
+///// FUNCIONES DINAMICOS //////
+
+int cantPares(int validos, int arregloInt[])
+{
+    int cant=0, i;
+
+    for(i=0; i<validos; i++)
+    {
+        if(arregloInt[i]%2==0)
+        {
+            cant ++;
+        }
+    }
+
+    return cant;
+}
+
+void copiarParesAArreglo(int validos, int arreglosInt[], int * arregloCopia)
+{
+    int i=0;
+    int j=0;
+
+    //int * p = (int *) malloc(sizeof(int)*cant);
+
+    for(i=0; i<validos; i++)
+    {
+         if(arreglosInt[i]%2==0)
+        {
+            arregloCopia[j]=arreglosInt[i];
+            j++;
+        }
+    }
+
+    return 0;
+}
+
+
+
+/* Hacer una función que reciba un arreglo dinámico por parámetro, la cantidad de elementos
+válidos del mismo, y un valor que indique el nuevo tamaño que se le quiere dar a dicho
+arreglo. La función debe redimensionar el arreglo (usar la función realloc) y retornar el puntero
+a dicho espacio de memoria. ​Investigar el uso de la función realloc. */
+
+
+int * redimensionarArreglo(int validos, int arreglo[], int nuevaDim)
+{
+    arreglo = realloc(arreglo, sizeof(int)*nuevaDim);
+
+    return arreglo;
+}
